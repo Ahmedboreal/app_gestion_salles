@@ -130,8 +130,21 @@ class ViewSalle(ctk.CTk):
         self.lister_salles()
 
     def supprimer_salle(self):
-        code = self.entry_code.get()
+        code = self.entry_code.get().strip()
+
+        if not code:
+            print("code obligatoire")
+            return
+
+        salle = self.service_salle.rechercher_salle(code)
+
+        if not salle:
+            print("Salle inexistante")
+            return
+
         self.service_salle.supprimer_salle(code)
+
+        print("Salle supprimé")
         self.lister_salles()
 
     def rechercher_salle(self):
