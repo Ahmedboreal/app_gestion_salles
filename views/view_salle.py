@@ -70,26 +70,63 @@ class ViewSalle(ctk.CTk):
 
         self.lister_salles()
 
-
-
     def ajouter_salle(self):
-        code = self.entry_code.get()
-        libelle = self.entry_libelle.get()
-        type_salle = self.entry_type.get()
-        capacite = int(self.entry_capacite.get())
+        code = self.entry_code.get().strip()
+        libelle = self.entry_libelle.get().strip()
+        type_salle = self.entry_type.get().strip()
+        capacite_txt = self.entry_capacite.get().strip()
+
+        if not code or not libelle or not type_salle or not capacite_txt:
+            print("Tous les champs sont obligatoires")
+            return
+
+        try:
+            capacite = int(capacite_txt)
+        except:
+            print("Capacité invalide")
+            return
+
+        salle_exist = self.service_salle.rechercher_salle(code)
+        if salle_exist:
+            print("Code déjà existant")
+            return
 
         salle = Salle(code, libelle, type_salle, capacite)
         self.service_salle.ajouter_salle(salle)
+
+        print("Salle ajoutée")
         self.lister_salles()
 
     def modifier_salle(self):
-        code = self.entry_code.get()
-        libelle = self.entry_libelle.get()
-        type_salle = self.entry_type.get()
-        capacite = int(self.entry_capacite.get())
+        code = self.entry_code.get().strip()
+        libelle = self.entry_libelle.get().strip()
+        type_salle = self.entry_type.get().strip()
+        capacite_txt = self.entry_capacite.get().strip()
+
+        if not code:
+            print("Code obligatoire")
+            return
+
+        if not libelle or not type_salle or not capacite_txt:
+            print("Tous les champs sont obligatoires")
+            return
+
+        try:
+            capacite = int(capacite_txt)
+        except:
+            print("Capacité invalide")
+            return
+
+        salle = self.service_salle.rechercher_salle(code)
+
+        if not salle:
+            print("Salle inexistante")
+            return
 
         salle = Salle(code, libelle, type_salle, capacite)
         self.service_salle.modifier_salle(salle)
+
+        print("Salle modifiée")
         self.lister_salles()
 
     def supprimer_salle(self):
