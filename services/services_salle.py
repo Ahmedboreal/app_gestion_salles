@@ -27,3 +27,11 @@ class ServiceSalle:
 
     def supprimer_salle(self, code):
         self.dao_salle.delete_salle(code)
+
+    def rechercher_salle(self, code):
+        resultat = self.dao_salle.get_salle(code)
+
+        if resultat:
+            return Salle(resultat[0], resultat[1], resultat[2], resultat[3])
+
+        return None
