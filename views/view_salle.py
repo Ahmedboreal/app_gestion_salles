@@ -39,6 +39,23 @@ class ViewSalle(ctk.CTk):
         self.frame_actions = ctk.CTkFrame(self)
         self.frame_actions.pack(pady=10, padx=10, fill="x")
 
+        self.cadreList = ctk.CTkFrame(self, corner_radius=10, width=400)
+        self.cadreList.pack(pady=10, padx=10)
+
+        self.treeList = ttk.Treeview(self.cadreList, columns=("code", "libelle", "type", "capacite"), show="headings")
+
+        self.treeList.heading("code", text="CODE")
+        self.treeList.heading("libelle", text="LIBELLÉ")
+        self.treeList.heading("type", text="TYPE")
+        self.treeList.heading("capacite", text="CAPACITÉ")
+
+        self.treeList.column("code", width=50)
+        self.treeList.column("libelle", width=150)
+        self.treeList.column("type", width=100)
+        self.treeList.column("capacite", width=100)
+
+        self.treeList.pack(expand=True, fill="both", padx=10, pady=10)
+
         self.btn_ajouter = ctk.CTkButton(self.frame_actions, text="Ajouter", command=self.ajouter_salle)
         self.btn_ajouter.grid(row=0, column=0, padx=10, pady=10)
 
@@ -88,3 +105,9 @@ class ViewSalle(ctk.CTk):
 
             self.entry_capacite.delete(0, "end")
             self.entry_capacite.insert(0, str(salle.capacite))
+
+    def lister_salles(self):
+        self.treeList.delete(*self.treeList.get_children())
+        liste = self.service_salle.recuperer_salles()
+        for s in liste:
+            self.treeList.insert("", "end", values=(s.code, s.libelle, s.type, s.capacite))
