@@ -1,4 +1,5 @@
 import customtkinter as ctk
+from tkinter import ttk
 from services.services_salle import ServiceSalle
 from models.salle import Salle
 
