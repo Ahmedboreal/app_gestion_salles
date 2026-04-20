@@ -1,37 +1,29 @@
-from data.dao_salle import DataSalle
 from models.salle import Salle
+from services.services_salle import ServiceSalle
 
+service_salle = ServiceSalle()
 
-data_salle = DataSalle()
+print("Liste des salles : ")
+salles = service_salle.recuperer_salles()
+for salle in salles:
+    salle.afficher_infos()
 
-# Test_connexion
-connexion = data_salle.get_connection()
-if connexion.is_connected():
-    print("Connexion à la base de données réussie.")
-connexion.close()
+nouvelle_salle = Salle("C101", "Salle service", "classe", 20)
+succes, message = service_salle.ajouter_salle(nouvelle_salle)
+print(message)
 
-# ajout
-salle1 = Salle("B101", "Salle de test", "Classe", 25)
-data_salle.insert_salle(salle1)
-print("Salle ajoutée.")
+nouvelle_salle.libelle = "Salle Service modifiee"
+nouvelle_salle.type = "laboratoire"
+nouvelle_salle.capacite = 35
+succes, message = service_salle.modifier_salle(nouvelle_salle)
+print(message)
 
-# modification
-salle1.libelle = "Salle modifiée"
-salle1.type = "Laboratoire"
-salle1.capacite = 30
-data_salle.update_salle(salle1)
-print("Salle modifiée.")
+salle_trouvee = service_salle.rechercher_salle("C101")
+if salle_trouvee:
+    print("Salle trouvée :")
+    salle_trouvee.afficher_infos()
+else:
+    print(" Salle introuvable.")
 
-# Recherche
-salle_trouvee = data_salle.get_salle("B101")
-print("Salle trouvée :", salle_trouvee)
-
-# Affichage_de_toutes_les_salles
-toutes_les_salles = data_salle.get_salles()
-print("Liste des salles :")
-for salle in toutes_les_salles:
-    print(salle)
-
-# Test_sup
-data_salle.delete_salle("B101")
-print("Salle supprimée.")
+service_salle.supprimer_salle("C101")
+print("Salle supprimée ")
