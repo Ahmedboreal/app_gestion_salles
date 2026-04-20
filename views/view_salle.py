@@ -99,6 +99,11 @@ class ViewSalle(ctk.CTk):
 
     def rechercher_salle(self):
         code = self.entry_code.get()
+
+        if not code:
+            print("Code obligatoire")
+            return
+
         salle = self.service_salle.rechercher_salle(code)
 
         if salle:
@@ -110,6 +115,10 @@ class ViewSalle(ctk.CTk):
 
             self.entry_capacite.delete(0, "end")
             self.entry_capacite.insert(0, str(salle.capacite))
+
+            print("Salle trouvée")
+        else:
+            print("Salle introuvable")
 
     def lister_salles(self):
         self.treeList.delete(*self.treeList.get_children())
