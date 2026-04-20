@@ -32,30 +32,45 @@ class DataSalle:
         curseur.close()
         connexion.close()
 
-        def update_salle(self, salle):
-            connexion = self.get_connection()
-            curseur = connexion.cursor()
+    def update_salle(self, salle):
+        connexion = self.get_connection()
+        curseur = connexion.cursor()
 
-            requete = """
-            UPDATE salle
-            SET libelle = %s, type = %s, capacite = %s
-            WHERE code = %s
-            """
+        requete = """
+        UPDATE salle
+        SET libelle = %s, type = %s, capacite = %s
+        WHERE code = %s
+        """
 
-            valeurs = (salle.libelle, salle.type, salle.capacite, salle.code)
-            curseur.execute(requete, valeurs)
+        valeurs = (salle.libelle, salle.type, salle.capacite, salle.code)
+        curseur.execute(requete, valeurs)
 
-            connexion.commit()
-            curseur.close()
-            connexion.close()
+        connexion.commit()
+        curseur.close()
+        connexion.close()
 
-            def delete_salle(self, code):
-                connexion = self.get_connection()
-                curseur = connexion.cursor()
 
-                requete = "DELETE FROM salle WHERE code = %s"
-                curseur.execute(requete, (code,))
+    def delete_salle(self, code):
+        connexion = self.get_connection()
+        curseur = connexion.cursor()
 
-                connexion.commit()
-                curseur.close()
-                connexion.close()
+        requete = "DELETE FROM salle WHERE code = %s"
+        curseur.execute(requete, (code,))
+
+        connexion.commit()
+        curseur.close()
+        connexion.close()
+
+    def get_salle(self, code):
+        connexion = self.get_connection()
+        curseur = connexion.cursor()
+
+        requete = "SELECT code, libelle, type, capacite FROM salle WHERE code = %s"
+        curseur.execute(requete, (code,))
+
+        resultat = curseur.fetchone()
+
+        curseur.close()
+        connexion.close()
+
+        return resultat
